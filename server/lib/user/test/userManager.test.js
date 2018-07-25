@@ -38,6 +38,18 @@ describe('UserManager tests', function() {
     const account = yield rest.getAccount(user.account);
   });
 
+  it.only('Create Grower', function* () {
+    const args = createGrowerArgs();
+    const user = yield contract.createGrower(args);
+    assert.equal(user.username, args.username, 'username');
+    assert.equal(user.role, UserRole.GROWER, 'role');
+    assert.equal(user.loc, args.loc, 'location');
+    assert.equal(user.cropName, args.cropName, 'cropName');
+    assert.equal(user.quantity, args.quantity, 'quantity');
+    // test that the account was created
+    const account = yield rest.getAccount(user.account);
+  });
+
   it('Create User - illegal name', function* () {
     const args = createUserArgs();
     args.username = '123456789012345678901234567890123'
@@ -249,6 +261,21 @@ function createUserArgs(_name, _role) {
     username: name + uid,
     password: 'Pass_' + uid,
     role: role,
+  }
+  return args;
+}
+
+function createGrowerArgs(_name, _role) {
+  const uid = util.uid();
+  //const role = _role || UserRole.GROWER;
+  const name = _name || 'User_';
+  const args = {
+    username: name + uid,
+    password: 'Pass_' + uid,
+    //role: role,
+    loc: "Idaho",
+    cropName: "asgrow",
+    quantity: 100 //what unit?
   }
   return args;
 }

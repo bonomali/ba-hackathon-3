@@ -1,4 +1,5 @@
 import "./User.sol";
+import "./Grower.sol";
 import "./UserRole.sol";
 import "../../common/ErrorCodes.sol";
 import "../../common/Util.sol";
@@ -40,6 +41,22 @@ contract UserManager is ErrorCodes, Util, UserRole {
     uint userId = users.length;
     usernameToIdMap[b32(username)] = userId;
     users.push(new User(account, username, pwHash, userId, role));
+    return ErrorCodes.SUCCESS;
+  }
+
+
+  function createGrower(address account, string username, bytes32 pwHash, bytes32 loc, bytes32 cropName, uint quantity) returns (ErrorCodes) {
+    // name must be < 32 bytes
+    if (bytes(username).length > 32) return ErrorCodes.ERROR;
+    // fail if username exists
+    if (exists(username)) return ErrorCodes.EXISTS;
+    // add user
+    uint userId = users.length;
+    usernameToIdMap[b32(username)] = userId;
+    Grower newGrower = new Grower(account, username, pwHash, userId);
+    newGrower.setParams(loc, cropName, quantity);
+    users.push(newGrower);
+
     return ErrorCodes.SUCCESS;
   }
 

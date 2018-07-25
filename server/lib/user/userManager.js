@@ -86,6 +86,33 @@ function* createUser(admin, contract, args) {
   return baUser;
 }
 
+// throws: ErrorCodes
+// creates grower...
+// returns: user record from search
+function* createGrower(admin, contract, args) {
+  rest.verbose('createGrower', args);
+
+  // create bloc user
+  const blocUser = yield rest.createUser(args.username, args.password);
+  args.account = blocUser.address;
+  args.pwHash = util.toBytes32(args.password); // FIXME this is not a hash
+  
+
+  // function createUser(address account, string username, bytes32 pwHash, UserRole role) returns (ErrorCodes) {
+  const method = 'createGrower';
+
+  // create the user, with the eth account
+  const result = yield rest.callMethod(admin, contract, method, args);
+  const errorCode = parseInt(result[0]);
+  if (errorCode != ErrorCodes.SUCCESS) {
+    throw new Error(errorCode);
+  }
+  // block until the user shows up in search
+  const baUser = yield getUser(admin, contract, args.username);
+  baUser.blocUser = blocUser;
+  return baUser;
+}
+
 function* exists(admin, contract, username) {
     rest.verbose('exists', username);
     // function exists(string username) returns (bool) {
