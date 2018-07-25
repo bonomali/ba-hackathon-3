@@ -21,7 +21,7 @@ contract Grower is User {
   function setParams(bytes32 _loc, bytes32 _cropName, uint _quantity) public {
       loc = _loc;
       cropName = _cropName;
-      quantity = __quantity;
+      quantity = _quantity;
   }
  
 
