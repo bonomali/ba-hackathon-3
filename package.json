@@ -11,6 +11,7 @@
     "test": "npm run test:user && npm run test:project && npm run test:routes",
     "test:project": "mocha server/lib/project/test/ --config server/config/${SERVER:-localhost}.config.yaml -b",
     "test:user": "mocha server/lib/user/test/ --config server/config/${SERVER:-localhost}.config.yaml -b",
+    "test:hackathon": "mocha server/lib/hackathon/main.test.js --config server/config/${SERVER:-localhost}.config.yaml -b",
     "test:routes": "mocha tests/v1/ -b",
     "test-windows": "npm run test-windows:user && npm run test-windows:project && npm run test:routes",
     "test-windows:project": "mocha server/lib/project/test/ --config server/config/%SERVER%.config.yaml -b",
