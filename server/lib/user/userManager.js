@@ -81,7 +81,7 @@ function* createUser(admin, contract, args) {
     throw new Error(errorCode);
   }
   // block until the user shows up in search
-  const baUser = yield getUser(admin, contract, args.username);
+  const baUser = yield getUser(admin, contract, args.username, false);
   baUser.blocUser = blocUser;
   return baUser;
 }
@@ -96,7 +96,8 @@ function* createGrower(admin, contract, args) {
   const blocUser = yield rest.createUser(args.username, args.password);
   args.account = blocUser.address;
   args.pwHash = util.toBytes32(args.password); // FIXME this is not a hash
-  
+  args.loc = util.toBytes32(args.loc);
+  args.cropName = util.toBytes32(args.cropName);
 
   // function createUser(address account, string username, bytes32 pwHash, UserRole role) returns (ErrorCodes) {
   const method = 'createGrower';
@@ -108,7 +109,7 @@ function* createGrower(admin, contract, args) {
     throw new Error(errorCode);
   }
   // block until the user shows up in search
-  const baUser = yield getUser(admin, contract, args.username);
+  const baUser = yield getUser(admin, contract, args.username, true);
   baUser.blocUser = blocUser;
   return baUser;
 }
@@ -125,7 +126,8 @@ function* exists(admin, contract, username) {
     return exist;
 }
 
-function* getUser(admin, contract, username) {
+
+function* getUser(admin, contract, username, isGrower) {
   rest.verbose('getUser', username);
   // function getUser(string username) returns (address) {
   const method = 'getUser';
@@ -140,7 +142,12 @@ function* getUser(admin, contract, username) {
   }
   // found - query for the full user record
   const userJs = require('./user');
-  const baUser = yield userJs.getUserByAddress(userAddress);
+  var baUser;
+  if (isGrower){
+    baUser = yield userJs.getGrowerByAddress(userAddress);
+  } else {
+    baUser = yield userJs.getUserByAddress(userAddress);
+  }
   return baUser;
 }
 

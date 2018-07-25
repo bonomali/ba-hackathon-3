@@ -4,6 +4,7 @@ const util = ba.common.util;
 const config = ba.common.config;
 
 const contractName = 'User';
+const growerContractName = 'Grower';
 const contractFilename = `${config.libPath}/user/contracts/User.sol`;
 
 const ErrorCodes = rest.getEnums(`${config.libPath}/common/ErrorCodes.sol`).ErrorCodes;
@@ -51,6 +52,12 @@ function* getUserByAddress(address) {
   const baUser = (yield rest.waitQuery(`${contractName}?address=eq.${address}`, 1))[0];
   return baUser;
 }
+
+function* getGrowerByAddress(address) {
+  const baUser = (yield rest.waitQuery(`${growerContractName}?address=eq.${address}`, 1))[0];
+  return baUser;
+}
+
 
 function* authenticate(admin, contract, pwHash) {
   rest.verbose('authenticate', pwHash);
