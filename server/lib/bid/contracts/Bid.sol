@@ -11,6 +11,8 @@ contract Bid is ErrorCodes, BidState {
   string public supplier;
   uint public amount;
   BidState public state;
+  //epoch?
+  uint public deliveryDate;
 
   function Bid(uint _id, string _name, string _supplier, uint _amount) {
     id = _id;
@@ -18,6 +20,10 @@ contract Bid is ErrorCodes, BidState {
     supplier = _supplier;
     amount = _amount;
     state = BidState.OPEN;
+  }
+
+  function setDeliveryDate(uint date) public {
+    deliveryDate = date;
   }
 
   function getState() returns (BidState) {

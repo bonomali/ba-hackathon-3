@@ -24,6 +24,9 @@ function setContract(admin, contract) {
   contract.createUser = function* (args) {
     return yield createUser(admin, contract, args);
   }
+  contract.createGrower = function* (args) {
+    return yield createGrower(admin, contract, args);
+  }
   contract.exists = function* (username) {
     return yield exists(admin, contract, username);
   }

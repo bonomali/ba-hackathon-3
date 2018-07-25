@@ -22,6 +22,15 @@ function setContract(admin, contract) {
   return contract;
 }
 
+function setDeliveryDate(admin, contract, args){
+  const result = yield rest.callMethod(admin, contract, "setDeliveryDate", args.date);
+  const errorCode = parseInt(result[0]);
+  if (errorCode != ErrorCodes.SUCCESS) {
+    throw new Error(errorCode);
+  }
+  
+}
+
 function* compileSearch(contract) {
   rest.verbose('compileSearch', contract.codeHash);
   if (yield rest.isSearchable(contract.codeHash)) {

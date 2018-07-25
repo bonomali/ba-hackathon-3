@@ -35,14 +35,19 @@ describe('Bid tests', function() {
       _name: name,
       _supplier: supplier,
       _amount: amount,
+      date: new Date().getTime() + 10000
     };
 
     const contract = yield bidJs.uploadContract(admin, args);
+    yield contract.setDeliveryDate(admin, contract, args);
+
     const bid = yield contract.getState();
     assert.equal(bid.id, id, 'id');
     assert.equal(bid.name, name, 'name');
     assert.equal(bid.supplier, supplier, 'supplier');
     assert.equal(bid.amount, amount, 'amount');
+
+    assert.equal(bid.deliveryDate, args.date, 'deliveryDate');
   });
 
   it('Search Contract', function* () {

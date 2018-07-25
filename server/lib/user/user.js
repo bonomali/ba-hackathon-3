@@ -87,4 +87,5 @@ module.exports = {
   getUsers: getUsers,
   getUserById: getUserById,
   contractName: contractName,
+  getGrowerByAddress: getGrowerByAddress
 };
